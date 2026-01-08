@@ -19,9 +19,9 @@ Route::get('/status', function () {
     ]);
 });
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'loginMobile']);
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'registerMobile']);
 
 Route::get('/categorias-servico', [CategoriaServicoController::class, 'index']);
 Route::get('/categorias-servico/{categoria}/estabelecimentos', [EstabelecimentoController::class, 'estabelecimentosCategoria']);

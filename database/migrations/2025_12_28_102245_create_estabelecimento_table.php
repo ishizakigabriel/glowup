@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('estabelecimento', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->bigIncrements('id')->primary();
             $table->foreignId('user_id')->index()->nullable();
             $table->string('nome');
+            $table->string('imagem',255)->nullable();
             $table->string('logradouro');
             $table->string('numero');
             $table->string('bairro');
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('lat')->nullable();
             $table->string('long')->nullable();
+            $table->double('avaliacao_media')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

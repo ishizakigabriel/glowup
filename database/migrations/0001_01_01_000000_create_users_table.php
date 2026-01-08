@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('UAC')->default(0);
+            /**
+             * 0 Aguardando seleção
+             * 1 Administrador do sistema
+             * 2 Usuário Comum
+             * 3 Estabelecimento comum
+             * 4 Estabelecimento prata
+             * 5 Estabelecimento ouro
+             */
             $table->rememberToken();
             $table->timestamps();
         });

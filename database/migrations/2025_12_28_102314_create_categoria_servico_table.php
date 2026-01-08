@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categoria_servico', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->bigIncrements('id')->primary();
             $table->string('nome');
             $table->string('descricao');
-            $table->string('imagem');
+            $table->string('imagem')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

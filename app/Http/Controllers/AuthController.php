@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function loginView()
+    {
+        return view('auth.login');
+    }
+
+    public function loginMobile(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -40,7 +45,13 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function registerView()
+    {
+        return view('auth.register');
+    }
+
+
+    public function registerMobile(Request $request)
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',

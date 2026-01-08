@@ -14,7 +14,8 @@ class CategoriaServicoController extends Controller
     public function index()
     {
         //
-        return CategoriaServico::get();
+        $categorias = CategoriaServico::get();
+        return view('categoria_servico.index', compact('categorias'));
     }
 
     /**
@@ -23,6 +24,7 @@ class CategoriaServicoController extends Controller
     public function create()
     {
         //
+        return view('categoria_servico.form');
     }
 
     /**
@@ -31,6 +33,21 @@ class CategoriaServicoController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->except('_token');
+        if($request->hasFile('imgPlanta'))
+        {
+            $arquivo = $request->file('imgPlanta');            
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'plantasala_'.$sala->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/salas/'), $filename);// ?
+            $sala->imgPlanta = $filename;
+        }
+        $categoriaServico = CategoriaServico::create([
+            'nome' => $data['nome'],
+            'descricao' => $data['descricao'],
+        ]);
+        return redirect()->route('categorias.index');
     }
 
     /**

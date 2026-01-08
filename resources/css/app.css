@@ -1,11 +1,209 @@
-@import 'tailwindcss';
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* Garante que os componentes do Material também usem a fonte */
+:root {
+    --md-sys-typescale-body-large-font: 'Roboto';
+    --md-sys-typescale-label-large-font: 'Roboto';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Superfícies Principais (Conforto Visual) */
+    --md-sys-color-surface: #121212;            /* Fundo principal do sistema */
+    --md-sys-color-surface-container: #1E1A20;  /* Menu lateral (um roxo-acinzentado muito escuro) */
+    
+    /* Cores de Destaque (A Identidade do App) */
+    --md-sys-color-primary: #D0BCFF;            /* Roxo Lavanda (Gótico Elegante / Beleza) */
+    --md-sys-color-on-primary: #381E72;         /* Texto sobre o roxo principal */
+    
+    --md-sys-color-secondary: #B69DF8;          /* Roxo vibrante para ícones secundários */
+    --md-sys-color-tertiary: #49454F;           /* Cinza para elementos menos importantes */
+
+    /* Estado Crítico (Tatuagem/Piercing - Atenção) */
+    --md-sys-color-error: #F2B8B5;              /* Vermelho pastel para alertas */
+
+    /* Tipografia */
+    --md-sys-color-on-surface: #E6E1E5;         /* Branco levemente acinzentado (não cansa a vista) */
+    --md-sys-color-outline: #938F99;
+}
+
+#sidebar {
+    background-color: var(--brand-sidebar-bg);
+    color: var(--brand-sidebar-text);
+}
+
+#sidebar md-list {
+    background-color: transparent;
+}
+
+#sidebar md-list-item {
+    background-color: transparent;
+    --md-list-item-container-color: transparent;
+    --md-list-item-label-text-color: var(--brand-sidebar-text);
+    --md-list-item-leading-icon-color: var(--brand-sidebar-text);
+    color: var(--brand-sidebar-text);
+}
+
+.sidebar-fixed {
+    width: 280px;
+    height: 100vh;
+    position: fixed; /* Fixa na tela */
+    top: 0;
+    left: 0;
+    background-color: var(--md-sys-color-surface-container-low);
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    box-sizing: border-box;
+    transition: width 0.3s ease;
+    z-index: 100;
+    overflow-x: hidden;
+}
+
+.sidebar-closed {
+    width: 80px;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    color: var(--md-sys-color-primary);
+}
+
+.sidebar-closed .nav-label,
+.sidebar-closed .brand-name {
+    display: none;
+}
+
+.sidebar-closed .sidebar-header {
+    justify-content: center;
+}
+
+.brand-name {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Ajuste do conteúdo principal para não sobrepor */
+main {
+    margin-left: 280px; /* Mesma largura da sidebar */
+    padding: 24px;
+    
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+.main-expanded {
+    margin-left: 80px;
+}
+
+.app-header {
+    margin-left: 280px;
+    padding: 12px 24px;
+    transition: margin-left 0.3s ease;
+    display: flex;
+    align-items: center;
+    background-color: var(--md-sys-color-surface);
+}
+
+.header-expanded {
+    margin-left: 80px;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--md-sys-color-primary);
+}
+
+/* Estilos de Cards e Formulários */
+.card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    max-width: 600px;
+    margin-bottom: 24px;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--md-sys-color-on-surface);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.form-control {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.alert-danger {
+    background-color: #F9DEDC;
+    color: #410E0B;
+    border: 1px solid #F2B8B5;
+}
+
+.alert-success {
+    background-color: #E6F4EA;
+    color: #1E4620;
+    border: 1px solid #C7E0C9;
+}
+
+#main-content {
+    background: linear-gradient(to bottom, #000000, var(--md-sys-color-on-primary));
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+.plan-card, .selection-card {
+    background-color: #FFFFFF22;
 }

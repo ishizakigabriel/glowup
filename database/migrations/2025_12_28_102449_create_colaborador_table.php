@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('colaborador', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->bigIncrements('id')->primary();
             $table->string('nome');
             $table->text('biografia')->nullable();
             $table->string('foto')->nullable();
-            $table->foreignId('estabelecimento_id')->index();
+            $table->bigInteger('estabelecimento_id')->unsigned();
+            $table->foreign('estabelecimento_id')->references('id')->on('estabelecimento')->onDelete('cascade');
+            $table->double('avaliacao_media')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

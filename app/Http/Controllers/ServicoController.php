@@ -70,4 +70,11 @@ class ServicoController extends Controller
         $estabelecimento = Estabelecimento::with('servicos')->find($estabelecimento);
         return $estabelecimento;
     }
+
+    public function meusServicos()
+    {
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
+        return $estabelecimento;
+    }
 }

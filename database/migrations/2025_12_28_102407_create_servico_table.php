@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('servico', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->bigIncrements('id')->primary();
             $table->string('nome');
             $table->string('descricao');
             $table->string('imagem')->nullable();
             $table->double('tempo_medio_duracao');
             $table->double('preco');
-            $table->foreignId('categoria_servico_id')->index();
-            $table->foreignId('estabelecimento_id')->index();
+            $table->bigInteger('categoria_servico_id')->unsigned();
+            $table->foreign('categoria_servico_id')->references('id')->on('categoria_servico')->onDelete('cascade');
+            $table->bigInteger('estabelecimento_id')->unsigned();
+            $table->foreign('estabelecimento_id')->references('id')->on('estabelecimento')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
