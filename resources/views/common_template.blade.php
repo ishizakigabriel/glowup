@@ -11,7 +11,6 @@
     </head>
 <body>
     @include('base.header')
-    @include('base.sidebar')
     <main id="main-content">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -35,19 +34,5 @@
         @yield('content')
     </main>
     @include('base.footer')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('sidebar-toggle');
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('main-content');
-            const header = document.getElementById('app-header');
-
-            toggleBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('sidebar-closed');
-                main.classList.toggle('main-expanded');
-                header.classList.toggle('header-expanded');
-            });
-        });
-    </script>
 </body>
 </html>

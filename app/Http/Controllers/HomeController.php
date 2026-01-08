@@ -22,7 +22,15 @@ class HomeController extends Controller
                 
                 break;
             default:
-
+                $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
+                if(is_null($estabelecimento))
+                {
+                    return redirect()->route('estabelecimento.form');
+                }
+                else
+                {
+                    
+                }
                 break;
         }
     }
