@@ -14,6 +14,11 @@
                 <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Studio Glow" required>
             </div>
 
+            <div class="form-group">
+                <label for="logo">Logotipo</label>
+                <input type="file" class="form-control" id="logo" name="logo" required>
+            </div>
+
             <!-- CEP e Logradouro -->
             <div class="form-row">
                 <div class="form-col" style="flex: 0 0 140px;">
@@ -66,8 +71,8 @@
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 24px;">
-                <button type="submit" class="btn-primary" style="width: 100%;">Salvar Perfil</button>
+            <div class="form-group" style="margin-top: 24px; align-items: end; padding-right: 15px;">
+                <button type="submit" class="btn-primary">Salvar Perfil</button>
             </div>
         </form>
     </div>

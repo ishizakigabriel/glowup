@@ -31,6 +31,20 @@ class EstabelecimentoController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->except('_token');
+        if($request->hasFile('imgPlanta'))
+        {
+            $arquivo = $request->file('imgPlanta');            
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'plantasala'.$sala->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/logos/'), $filename);// ? 
+        }
+        $estabelecimento = Estabelecimento::create([
+            'nome' => $data['nome'],
+        ]);
+        return redirect()->route('estabelecimentos.index');
+            
     }
 
     /**

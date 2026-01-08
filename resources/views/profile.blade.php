@@ -66,8 +66,8 @@
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 24px;">
-                <button type="submit" class="btn-primary" style="width: 100%;">Salvar Perfil</button>
+            <div class="form-group" style="margin-top: 24px; align-items: center;">
+                <button type="submit" class="btn-primary">Salvar Perfil</button>
             </div>
         </form>
     </div>
