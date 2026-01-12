@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Servico;
 use App\Models\Estabelecimento;
+use App\Models\CategoriaServico;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,21 @@ class ServicoController extends Controller
     public function index()
     {
         //
+        $user = auth()->user();
+        if($user->UAC == 1)
+        {
+            $servicos = Servico::get();
+        }
+        else if(in_array($user->UAC, [3, 4, 5]))
+        {
+            $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
+            $servicos = $estabelecimento->servicos;
+        }
+        else
+        {
+            $servicos = [];
+        }
+        return view('servicos.index', compact('servicos'));
     }
 
     /**
@@ -23,6 +39,11 @@ class ServicoController extends Controller
     public function create()
     {
         //
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $servico = null;
+        $categorias = CategoriaServico::get();
+        return view('servicos.form', compact('estabelecimento', 'servico', 'categorias'));
     }
 
     /**
@@ -31,6 +52,28 @@ class ServicoController extends Controller
     public function store(Request $request)
     {
         //
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $data = $request->except('_token');
+        $filename = '';
+        if($request->hasFile('imagem'))
+        {
+            $arquivo = $request->file('imagem');            
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'servico'.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/servicos/'), $filename);// ?
+        }
+        $servico = Servico::create([
+            'nome' => $data['nome'],
+            'descricao' => $data['descricao'],
+            'imagem' => $filename,
+            'tempo_medio_duracao' => $data['tempo_medio_duracao'],
+            'preco' => str_replace(',', '.', $data['preco']),
+            'categoria_servico_id' => $data['categoria_servico_id'],
+            'estabelecimento_id' => $estabelecimento->id
+        ]);
+        return redirect()->route('servicos.index');
     }
 
     /**
@@ -39,6 +82,7 @@ class ServicoController extends Controller
     public function show(Servico $servico)
     {
         //
+        
     }
 
     /**
@@ -47,6 +91,10 @@ class ServicoController extends Controller
     public function edit(Servico $servico)
     {
         //
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $categorias = CategoriaServico::get();
+        return view('servicos.form', compact('estabelecimento', 'servico', 'categorias'));
     }
 
     /**
@@ -55,6 +103,31 @@ class ServicoController extends Controller
     public function update(Request $request, Servico $servico)
     {
         //
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $data = $request->except('_token');
+        $filename = '';
+        if($request->hasFile('imagem'))
+        {
+            $arquivo = $request->file('imagem');            
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'servico'.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/servicos/'), $filename);// ?
+        }
+        else
+        {
+            $filename = $servico->imagem;
+        }
+        $servico->update([
+            'nome' => $data['nome'],
+            'descricao' => $data['descricao'],
+            'imagem' => $filename,
+            'tempo_medio_duracao' => $data['tempo_medio_duracao'],
+            'preco' => str_replace(',', '.', $data['preco'])
+        ]);
+        $servico->save();
+        return redirect()->route('servicos.index');
     }
 
     /**
@@ -63,6 +136,8 @@ class ServicoController extends Controller
     public function destroy(Servico $servico)
     {
         //
+        $servico->delete();
+        return redirect()->route('servicos.index');
     }
 
     public function servicosEstabelecimento($estabelecimento)
@@ -75,6 +150,7 @@ class ServicoController extends Controller
     {
         $user = auth()->user();
         $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
-        return $estabelecimento;
+        $servicos = $estabelecimento->servicos;
+        return view('servicos.index', compact('servicos'));
     }
 }

@@ -3,20 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Estabelecimento extends Model
 {
     //
+    use SoftDeletes;
+
     protected $table = 'estabelecimento';
 
     protected $fillable = [
+        'user_id',
         'nome',
+        'imagem',
+        'cep',
         'logradouro',
         'numero',
+        'complemento',
         'bairro',
         'cidade',
         'estado',
-        'cep',
         'telefone',
         'email',
         'lat',
@@ -26,5 +32,10 @@ class Estabelecimento extends Model
     public function servicos()
     {
         return $this->hasMany(Servico::class, 'estabelecimento_id', 'id');
+    }   
+
+    public function colaboradores()
+    {
+        return $this->hasMany(Colaborador::class, 'estabelecimento_id', 'id');
     }   
 }

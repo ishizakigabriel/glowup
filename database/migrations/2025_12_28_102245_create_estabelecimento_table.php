@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('estabelecimento', function (Blueprint $table) {
             $table->bigIncrements('id')->primary();
-            $table->foreignId('user_id')->index()->nullable();
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('nome');
             $table->string('imagem',255)->nullable();
+            $table->string('cep');
             $table->string('logradouro');
             $table->string('numero');
+            $table->string('complemento')->nullable();
             $table->string('bairro');
             $table->string('cidade');
             $table->string('estado');
-            $table->string('cep');
             $table->string('telefone');
             $table->string('email');
             $table->string('lat')->nullable();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Estabelecimento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Geocoder\Facades\Geocoder;
 
 class EstabelecimentoController extends Controller
 {
@@ -22,7 +23,8 @@ class EstabelecimentoController extends Controller
     public function create()
     {
         //
-        return view('estabelecimento.form');
+        $estabelecimento = null;
+        return view('estabelecimento.form', compact('estabelecimento'));
     }
 
     /**
@@ -31,19 +33,35 @@ class EstabelecimentoController extends Controller
     public function store(Request $request)
     {
         //
+        $user = auth()->user();
         $data = $request->except('_token');
-        if($request->hasFile('imgPlanta'))
+        $endereco = $data['logradouro'].', '.$data['numero'].' - '.$data['bairro'].', '.$data['cidade'].' - '.$data['estado'].', '.$data['cep'];
+        $latLong = Geocoder::getCoordinatesForAddress($endereco);
+        if($request->hasFile('logo'))
         {
-            $arquivo = $request->file('imgPlanta');            
+            $arquivo = $request->file('logo');  
             $extension = $arquivo->extension();
-            $filename = hash('sha256', 'plantasala'.$sala->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = hash('sha256', 'logo'.$user->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
             $filename = $filename.'.'.$extension;
             $arquivo->move(public_path('storage/logos/'), $filename);// ? 
         }
         $estabelecimento = Estabelecimento::create([
-            'nome' => $data['nome'],
+            'user_id' => $user->id,
+            'nome' => $data['nome'],            
+            'imagem' => $filename,
+            'cep' => $data['cep'],
+            'logradouro' => $data['logradouro'],
+            'numero' => $data['numero'],
+            'complemento' => $data['complemento'],
+            'bairro' => $data['bairro'],
+            'cidade' => $data['cidade'],
+            'estado' => $data['estado'],
+            'telefone' => $data['telefone'],
+            'email' => $data['email'],
+            'lat' => $latLong['lat'],
+            'long' => $latLong['lng'],
         ]);
-        return redirect()->route('estabelecimentos.index');
+        return redirect()->route('estabelecimentos.edit', ['estabelecimento' => $estabelecimento->id]);
             
     }
 
@@ -61,6 +79,7 @@ class EstabelecimentoController extends Controller
     public function edit(Estabelecimento $estabelecimento)
     {
         //
+        return view('estabelecimento.form', compact('estabelecimento'));
     }
 
     /**
@@ -69,6 +88,34 @@ class EstabelecimentoController extends Controller
     public function update(Request $request, Estabelecimento $estabelecimento)
     {
         //
+        $user = auth()->user();
+        $data = $request->except('_token');
+        $endereco = $data['logradouro'].', '.$data['numero'].' - '.$data['bairro'].', '.$data['cidade'].' - '.$data['estado'].', '.$data['cep'];
+        $latLong = Geocoder::getCoordinatesForAddress($endereco);
+        if($request->hasFile('logo'))
+        {
+            $arquivo = $request->file('logo');  
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'logo'.$user->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/logos/'), $filename);// ? 
+        }
+        $estabelecimento->update([
+            'nome' => $data['nome'],            
+            'imagem' => $filename,
+            'cep' => $data['cep'],
+            'logradouro' => $data['logradouro'],
+            'numero' => $data['numero'],
+            'complemento' => $data['complemento'],
+            'bairro' => $data['bairro'],
+            'cidade' => $data['cidade'],
+            'estado' => $data['estado'],
+            'telefone' => $data['telefone'],
+            'email' => $data['email'],
+            'lat' => $latLong['lat'],
+            'long' => $latLong['lng'],
+        ]);
+        return redirect()->route('estabelecimentos.edit', ['estabelecimento' => $estabelecimento->id]);
     }
 
     /**

@@ -24,7 +24,8 @@ class CategoriaServicoController extends Controller
     public function create()
     {
         //
-        return view('categoria_servico.form');
+        $categoria = null;
+        return view('categoria_servico.form', compact('categoria'));
     }
 
     /**
@@ -34,18 +35,19 @@ class CategoriaServicoController extends Controller
     {
         //
         $data = $request->except('_token');
-        if($request->hasFile('imgPlanta'))
+        $filename = '';
+        if($request->hasFile('imagem'))
         {
-            $arquivo = $request->file('imgPlanta');            
+            $arquivo = $request->file('imagem');            
             $extension = $arquivo->extension();
-            $filename = hash('sha256', 'plantasala_'.$sala->id.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = hash('sha256', 'categoria_'.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
             $filename = $filename.'.'.$extension;
-            $arquivo->move(public_path('storage/salas/'), $filename);// ?
-            $sala->imgPlanta = $filename;
+            $arquivo->move(public_path('storage/categorias/'), $filename);// ?
         }
         $categoriaServico = CategoriaServico::create([
             'nome' => $data['nome'],
             'descricao' => $data['descricao'],
+            'imagem' => $filename
         ]);
         return redirect()->route('categorias.index');
     }
@@ -53,7 +55,7 @@ class CategoriaServicoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CategoriaServico $categoriaServico)
+    public function show(CategoriaServico $categoria)
     {
         //
     }
@@ -61,24 +63,44 @@ class CategoriaServicoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CategoriaServico $categoriaServico)
+    public function edit(CategoriaServico $categoria)
     {
         //
+        return view('categoria_servico.form', compact('categoria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CategoriaServico $categoriaServico)
+    public function update(CategoriaServico $categoria, Request $request)
     {
         //
+        $data = $request->except('_token');
+        $filename = '';
+        if($request->hasFile('imagem'))
+        {
+            $arquivo = $request->file('imagem');            
+            $extension = $arquivo->extension();
+            $filename = hash('sha256', 'categoria_'.$arquivo->getClientOriginalName().date('Y-m-d H:i:s'));
+            $filename = $filename.'.'.$extension;
+            $arquivo->move(public_path('storage/categorias/'), $filename);// ?
+        }
+        $categoria->update([
+            'nome' => $data['nome'],
+            'descricao' => $data['descricao'],
+            'imagem' => $filename
+        ]);
+        $categoria->save();
+        return redirect()->route('categorias.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CategoriaServico $categoriaServico)
+    public function destroy(CategoriaServico $categoria)
     {
         //
+        $categoria->delete();
+        return redirect()->route('categorias.index');
     }
 }
