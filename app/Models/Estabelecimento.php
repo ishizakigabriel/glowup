@@ -38,4 +38,9 @@ class Estabelecimento extends Model
     {
         return $this->hasMany(Colaborador::class, 'estabelecimento_id', 'id');
     }   
+
+    public function galeria()
+    {
+        return $this->hasMany(Foto::class, 'estabelecimento_id', 'id');
+    }   
 }

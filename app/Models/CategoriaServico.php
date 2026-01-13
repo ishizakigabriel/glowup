@@ -16,5 +16,8 @@ class CategoriaServico extends Model
         'nome',
         'descricao',
         'imagem',
+        'cor_profundo',
+        'cor_pastel',
+        'cor_vivido'
     ];
 }

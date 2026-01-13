@@ -100,6 +100,10 @@ class EstabelecimentoController extends Controller
             $filename = $filename.'.'.$extension;
             $arquivo->move(public_path('storage/logos/'), $filename);// ? 
         }
+        else
+        {
+            $filename = $estabelecimento->imagem;
+        }
         $estabelecimento->update([
             'nome' => $data['nome'],            
             'imagem' => $filename,
@@ -126,9 +130,22 @@ class EstabelecimentoController extends Controller
         //
     }
 
-    public function estabelecimentosCategoria($categoria)
+    public function estabelecimentosCategoria(Request $request, $categoria)
     {
-        $estabelecimento = Estabelecimento::with('servicos')->whereRelation('servicos', 'categoria_servico_id', $categoria)->get();
-        return $estabelecimento;
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+
+        $query = Estabelecimento::with('servicos', 'galeria')
+            ->whereRelation('servicos', 'categoria_servico_id', $categoria);
+
+        if ($latitude && $longitude) {
+            // Calcula a distância em KM usando a fórmula de Haversine e ordena por proximidade
+            // Nota: Usamos `long` entre crases pois é uma palavra reservada no MySQL
+            $query->select('*')
+                ->selectRaw("(6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) AS distancia", [$latitude, $longitude, $latitude])
+                ->orderBy('distancia');
+        }
+
+        return $query->get();
     }
 }

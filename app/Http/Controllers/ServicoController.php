@@ -69,7 +69,7 @@ class ServicoController extends Controller
             'descricao' => $data['descricao'],
             'imagem' => $filename,
             'tempo_medio_duracao' => $data['tempo_medio_duracao'],
-            'preco' => str_replace(',', '.', $data['preco']),
+            'preco' => str_replace(',', '.', str_replace('.', '', $data['preco'])),
             'categoria_servico_id' => $data['categoria_servico_id'],
             'estabelecimento_id' => $estabelecimento->id
         ]);
@@ -124,7 +124,7 @@ class ServicoController extends Controller
             'descricao' => $data['descricao'],
             'imagem' => $filename,
             'tempo_medio_duracao' => $data['tempo_medio_duracao'],
-            'preco' => str_replace(',', '.', $data['preco'])
+            'preco' => str_replace(',', '.', str_replace('.', '', $data['preco']))
         ]);
         $servico->save();
         return redirect()->route('servicos.index');
@@ -140,10 +140,22 @@ class ServicoController extends Controller
         return redirect()->route('servicos.index');
     }
 
-    public function servicosEstabelecimento($estabelecimento)
+    public function servicosEstabelecimento(Request $request, $estabelecimento)
     {
-        $estabelecimento = Estabelecimento::with('servicos')->find($estabelecimento);
-        return $estabelecimento;
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+
+        $query = Estabelecimento::with('servicos', 'galeria');
+
+        if ($latitude && $longitude) {
+            // Calcula a distância em KM usando a fórmula de Haversine e ordena por proximidade
+            // Nota: Usamos `long` entre crases pois é uma palavra reservada no MySQL
+            $query->select('*')
+                ->selectRaw("(6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) AS distancia", [$latitude, $longitude, $latitude])
+                ->orderBy('distancia');
+        }
+
+        return $query->find($estabelecimento);
     }
 
     public function meusServicos()

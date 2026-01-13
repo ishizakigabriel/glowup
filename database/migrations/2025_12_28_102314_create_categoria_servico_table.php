@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nome');
             $table->string('descricao');
             $table->string('imagem')->nullable();
+            $table->string('cor_profundo',9)->nullable();
+            $table->string('cor_pastel',9)->nullable();
+            $table->string('cor_vivido',9)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

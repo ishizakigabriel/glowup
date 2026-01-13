@@ -41,14 +41,28 @@ main {
     padding: 12px 24px;
     display: flex;
     align-items: center;
-    background-color: var(--md-sys-color-surface);
+    /* Mistura de grafite carbono com roxo #3d0b37 e opacidade (Glass Card) */
+    background-color: #1D1420F8;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(74, 20, 140, 0.7); /* Efeito de Glow mais intenso e difuso */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.app-header button:not(.btn-primary) {
+.app-header button:not(.btn-primary),
+.app-header a {
     background: transparent;
     border: none;
     cursor: pointer;
     color: var(--md-sys-color-primary);
+    font-weight: 100; /* Fonte mais fina */
+    letter-spacing: 1.2px; /* Espaçamento moderno */
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 /* Estilos de Cards e Formulários */

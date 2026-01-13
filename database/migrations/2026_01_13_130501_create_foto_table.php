@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('colaborador', function (Blueprint $table) {
+        Schema::create('foto', function (Blueprint $table) {
             $table->bigIncrements('id')->primary();
-            $table->string('nome');
-            $table->string('especialidades');
-            $table->text('biografia')->nullable();
-            $table->string('foto')->nullable();
             $table->bigInteger('estabelecimento_id')->unsigned();
             $table->foreign('estabelecimento_id')->references('id')->on('estabelecimento')->onDelete('cascade');
-            $table->double('avaliacao_media')->nullable();
+            $table->string('foto');
+            $table->text('descricao')->nullable();
+            $table->integer('ordem')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('colaborador');
+        Schema::dropIfExists('foto');
     }
 };

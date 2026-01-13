@@ -23,6 +23,6 @@ Route::post('/login', [AuthController::class, 'loginMobile']);
 
 Route::post('/register', [AuthController::class, 'registerMobile']);
 
-Route::get('/categorias-servico', [CategoriaServicoController::class, 'index']);
-Route::get('/categorias-servico/{categoria}/estabelecimentos', [EstabelecimentoController::class, 'estabelecimentosCategoria']);
-Route::get('/estabelecimento/{estabelecimento}/servicos', [ServicoController::class, 'servicosEstabelecimento']);
+Route::get('/categorias-servico', [CategoriaServicoController::class, 'categorias']);
+Route::post('/categorias-servico/{categoria}/estabelecimentos', [EstabelecimentoController::class, 'estabelecimentosCategoria']);
+Route::post('/estabelecimento/{estabelecimento}/servicos', [ServicoController::class, 'servicosEstabelecimento']);

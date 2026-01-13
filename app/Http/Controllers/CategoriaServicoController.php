@@ -47,7 +47,10 @@ class CategoriaServicoController extends Controller
         $categoriaServico = CategoriaServico::create([
             'nome' => $data['nome'],
             'descricao' => $data['descricao'],
-            'imagem' => $filename
+            'imagem' => $filename,
+            'cor_profundo' => $data['cor_profundo'],
+            'cor_pastel' => $data['cor_pastel'],
+            'cor_vivido' => $data['cor_vivido']
         ]);
         return redirect()->route('categorias.index');
     }
@@ -68,7 +71,7 @@ class CategoriaServicoController extends Controller
         //
         return view('categoria_servico.form', compact('categoria'));
     }
-
+ 
     /**
      * Update the specified resource in storage.
      */
@@ -88,7 +91,10 @@ class CategoriaServicoController extends Controller
         $categoria->update([
             'nome' => $data['nome'],
             'descricao' => $data['descricao'],
-            'imagem' => $filename
+            'imagem' => $filename,
+            'cor_profundo' => $data['cor_profundo'],
+            'cor_pastel' => $data['cor_pastel'],
+            'cor_vivido' => $data['cor_vivido']
         ]);
         $categoria->save();
         return redirect()->route('categorias.index');
@@ -102,5 +108,11 @@ class CategoriaServicoController extends Controller
         //
         $categoria->delete();
         return redirect()->route('categorias.index');
+    }
+
+    public function categorias()
+    {
+        $categorias = CategoriaServico::get();
+        return $categorias;
     }
 }

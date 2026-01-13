@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoriaServicoController;
 use App\Http\Controllers\EstabelecimentoController;
+use App\Http\Controllers\FotoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\ColaboradorController;
 use App\Http\Controllers\AgendamentoController;
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function(){
 
     Route::resource('categorias', CategoriaServicoController::class);
     Route::resource('estabelecimentos', EstabelecimentoController::class);
+    Route::resource('fotos', FotoController::class);
     Route::resource('servicos', ServicoController::class);
     Route::resource('colaboradores', ColaboradorController::class);
     Route::resource('agendamentos', AgendamentoController::class);

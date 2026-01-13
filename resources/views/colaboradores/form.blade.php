@@ -10,28 +10,35 @@
             @if (!is_null($colaborador))
                 @method('PUT')
             @endif
-            
+
             <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do profissional" required value="{{ old('nome', $colaborador->nome ?? '') }}">
+                <label for="nome">Nome do Colaborador</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Ana Silva" required value="{{ $colaborador->nome ?? '' }}">
             </div>
 
             <div class="form-group">
-                <label for="cargo">Cargo / Especialidade</label>
-                <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Ex: Cabeleireiro, Manicure..." value="{{ old('cargo', $colaborador->cargo ?? '') }}">
+                <label for="cargo">Cargo</label>
+                <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Ex: Cabeleireira, Manicure..." value="{{ $colaborador->cargo ?? '' }}">
             </div>
 
             <div class="form-group">
                 <label for="foto">Foto de Perfil</label>
-                <input type="file" class="form-control" id="foto" name="foto">
+                <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                @if(isset($colaborador) && $colaborador->foto)
+                    <div style="margin-top: 8px;">
+                        <small style="color: var(--md-sys-color-on-surface); opacity: 0.7;">
+                            Foto atual cadastrada
+                        </small>
+                    </div>
+                @endif
             </div>
 
             <div class="form-group">
                 <label for="biografia">Biografia</label>
-                <textarea class="form-control" id="biografia" name="biografia" rows="4" placeholder="Breve descrição sobre o profissional...">{{ old('biografia', $colaborador->biografia ?? '') }}</textarea>
+                <textarea class="form-control" id="biografia" name="biografia" rows="4" placeholder="Breve descrição sobre o colaborador...">{{ $colaborador->biografia ?? '' }}</textarea>
             </div>
 
-            <div class="form-group" style="margin-top: 24px; align-items: end; padding-right: 15px;">
+            <div class="form-group" style="margin-top: 24px; align-items: center;">
                 <button type="submit" class="btn-primary">Salvar Colaborador</button>
             </div>
         </form>
