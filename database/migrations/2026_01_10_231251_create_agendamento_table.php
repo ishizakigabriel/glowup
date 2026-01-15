@@ -24,8 +24,8 @@ return new class extends Migration
             $table->time('fim');
             $table->integer('status')->default(0);
             /**
-             * 0 - Pendente
-             * 1 - Aprovado
+             * 0 - Lock
+             * 1 - Confirmado
              * 2 - Cancelado
              */
             $table->timestamps();

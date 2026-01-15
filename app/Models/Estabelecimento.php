@@ -43,4 +43,9 @@ class Estabelecimento extends Model
     {
         return $this->hasMany(Foto::class, 'estabelecimento_id', 'id');
     }   
+
+    public function agendamentos()
+    {
+        return $this->hasMany(Agendamento::class, 'estabelecimento_id', 'id');
+    }   
 }

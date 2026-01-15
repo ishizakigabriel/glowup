@@ -17,8 +17,8 @@
             </div>
 
             <div class="form-group">
-                <label for="cargo">Cargo</label>
-                <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Ex: Cabeleireira, Manicure..." value="{{ $colaborador->cargo ?? '' }}">
+                <label for="especialidades">Especialidade</label>
+                <input type="text" class="form-control" id="especialidades" name="especialidades" placeholder="Ex: Cabeleireira, Manicure..." value="{{ $colaborador->cargo ?? '' }}">
             </div>
 
             <div class="form-group">

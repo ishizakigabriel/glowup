@@ -27,4 +27,14 @@ class Servico extends Model
         return $this->belongTo(Estabelecimento::class, 'estabelecimento_id', 'id');
     }
 
+    public function colaboradoresCapacitados()
+    {
+        return $this->belongsToMany(Colaborador::class, 'colaborador_servico', 'servico_id', 'colaborador_id');
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(CategoriaServico::class, 'categoria_servico_id', 'id');
+    }
+
 }

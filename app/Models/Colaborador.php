@@ -13,6 +13,7 @@ class Colaborador extends Model
 
     protected $fillable = [
         'nome',
+        'especialidades',
         'biografia',
         'foto',
         'estabelecimento_id',

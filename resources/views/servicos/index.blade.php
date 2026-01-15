@@ -23,6 +23,7 @@
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
+                        <a href="{{ route('colaboradores_capacitados', ['servico' => $servico->id]) }}" style="color: inherit; text-decoration: none;" title="Colaboradores Capacitados"><span class="material-symbols-outlined">people</span></a>
                         <a href="{{ route('servicos.edit', $servico->id) }}" style="color: inherit; text-decoration: none;" title="Editar"><span class="material-symbols-outlined">edit</span></a>
                         <form action="{{ route('servicos.destroy', $servico->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este serviço?');">
                             @csrf

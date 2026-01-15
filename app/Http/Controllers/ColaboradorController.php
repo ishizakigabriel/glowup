@@ -73,7 +73,7 @@ class ColaboradorController extends Controller
 
         $request->validate([
             'nome' => 'required|string|max:255',
-            'cargo' => 'nullable|string|max:255',
+            'especialidades' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'biografia' => 'nullable|string',
         ]);
@@ -90,8 +90,6 @@ class ColaboradorController extends Controller
         }
 
         $data['foto'] = $filename;
-
-
         Colaborador::create($data);
 
         return redirect()->route('colaboradores.index')->with('success', 'Colaborador cadastrado com sucesso!');

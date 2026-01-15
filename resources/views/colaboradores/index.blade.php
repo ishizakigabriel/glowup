@@ -23,7 +23,7 @@
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; font-weight: 500;">{{ $colaborador->nome }}</h3>
                             <p style="margin: 4px 0 0; font-size: 0.9rem; opacity: 0.8;">
-                                {{ $colaborador->cargo ?? 'Profissional' }}
+                                {{ $colaborador->especialidades ?? 'Profissional' }}
                             </p>
                         </div>
                     </div>

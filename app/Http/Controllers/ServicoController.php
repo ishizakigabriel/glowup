@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Servico;
+use App\Models\Colaborador;
 use App\Models\Estabelecimento;
 use App\Models\CategoriaServico;
 use App\Http\Controllers\Controller;
@@ -145,7 +146,7 @@ class ServicoController extends Controller
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
 
-        $query = Estabelecimento::with('servicos', 'galeria');
+        $query = Estabelecimento::with('servicos', 'galeria', 'servicos.colaboradoresCapacitados');
 
         if ($latitude && $longitude) {
             // Calcula a distância em KM usando a fórmula de Haversine e ordena por proximidade
@@ -158,11 +159,40 @@ class ServicoController extends Controller
         return $query->find($estabelecimento);
     }
 
+    public function teste($estabelecimento)
+    {
+        $query = Estabelecimento::with('servicos', 'galeria', 'servicos.colaboradoresCapacitados');
+        return $query->find($estabelecimento);
+    }
+
     public function meusServicos()
     {
         $user = auth()->user();
         $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
         $servicos = $estabelecimento->servicos;
         return view('servicos.index', compact('servicos'));
+    }
+
+    public function colaboradoresCapacitados(Servico $servico)
+    {
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::with('servicos')->where('user_id', $user->id)->first();
+        $colaboradores = $estabelecimento->colaboradores;
+        $colaboradoresCapacitados = $servico->colaboradoresCapacitados()->get();
+        return view('colaborador_servicos.index', compact('colaboradores', 'colaboradoresCapacitados', 'servico'));
+    }   
+
+    public function colaboradoresCapacitadosStore(Request $request, Servico $servico)
+    {
+        $data = $request->all();
+        $servico->colaboradoresCapacitados()->attach($data['colaborador_id']);
+        $servico->save();
+        return redirect()->route('colaboradores_capacitados', ['servico' => $servico->id]);
+    }
+
+    public function colaboradoresCapacitadosDestroy(Request $request, Servico $servico, Colaborador $colaborador)
+    {
+        $servico->colaboradoresCapacitados()->detach($colaborador);
+        return redirect()->route('colaboradores_capacitados', ['servico' => $servico->id]);
     }
 }

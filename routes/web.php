@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function(){
     Route::resource('estabelecimentos', EstabelecimentoController::class);
     Route::resource('fotos', FotoController::class);
     Route::resource('servicos', ServicoController::class);
+    Route::get('/servicos/{servico}/colaboradores-capacitados', [ServicoController::class, 'colaboradoresCapacitados'])->name('colaboradores_capacitados');
+    Route::post('/servicos/{servico}/colaboradores-capacitados', [ServicoController::class, 'colaboradoresCapacitadosStore'])->name('colaboradores_capacitados.store');
+    Route::delete('/servicos/{servico}/colaboradores-capacitados/{colaborador}', [ServicoController::class, 'colaboradoresCapacitadosDestroy'])->name('colaboradores_capacitados.destroy');
     Route::resource('colaboradores', ColaboradorController::class);
     Route::resource('agendamentos', AgendamentoController::class);
 });
