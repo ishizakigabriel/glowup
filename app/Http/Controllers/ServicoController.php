@@ -43,7 +43,7 @@ class ServicoController extends Controller
         $user = auth()->user();
         $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
         $servico = null;
-        $categorias = CategoriaServico::get();
+        $categorias = CategoriaServico::with('cnaes')->get();
         return view('servicos.form', compact('estabelecimento', 'servico', 'categorias'));
     }
 
@@ -94,7 +94,7 @@ class ServicoController extends Controller
         //
         $user = auth()->user();
         $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
-        $categorias = CategoriaServico::get();
+        $categorias = CategoriaServico::with('cnaes')->get();
         return view('servicos.form', compact('estabelecimento', 'servico', 'categorias'));
     }
 

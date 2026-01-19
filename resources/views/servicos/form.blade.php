@@ -54,7 +54,7 @@
                         <option value="">Selecione uma categoria</option>
                         @foreach($categorias as $categoria)
                             <option value="{{ $categoria->id }}" {{ (isset($servico) && $servico->categoria_servico_id == $categoria->id) ? 'selected' : '' }}>
-                                {{ $categoria->nome }}
+                                {{ $categoria->nome }} {{ $categoria->cnaes->contains('id', optional($estabelecimento)->cnae_id) ? '✓' : '' }}
                             </option>
                         @endforeach
                     </select>

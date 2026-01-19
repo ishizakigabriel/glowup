@@ -119,7 +119,7 @@ class CategoriaServicoController extends Controller
 
     public function indexCnaes(CategoriaServico $categoria)
     {
-        $cnaes = Cnae::get();
+        $cnaes = Cnae::whereNotIn('id', $categoria->cnaes->pluck('id'))->get();
         return view('categoria_servico.cnaes', compact('categoria','cnaes'));
     }
 
