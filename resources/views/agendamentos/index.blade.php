@@ -29,6 +29,9 @@
             height: 'auto',
             slotMinTime: '07:00:00',
             slotMaxTime: '22:00:00',
+            eventSources: [
+                '{{ route('ajax_agendamentos') }}'
+            ]
             // events: [] // Aqui você poderá carregar os eventos do backend futuramente
         });
         calendar.render();

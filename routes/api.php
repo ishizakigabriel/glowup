@@ -1,17 +1,19 @@
 <?php
-
+use App\Models\User;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoriaServicoController;
 use App\Http\Controllers\EstabelecimentoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\AgendamentoController;
-
-
+use App\Http\Controllers\EnderecoController;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    $response = User::with('enderecos')->find($user->id);
+    return response()->json($response, 200);
 })->middleware('auth:sanctum');
 
 Route::get('/status', function () {
@@ -27,6 +29,13 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/agendamentos/{agendamento}', [AgendamentoController::class, 'detalhesAgendamento']);
     Route::get('/agendamentos/{agendamento}/confirmar', [AgendamentoController::class, 'confirmarAgendamento']);
     Route::get('/agendamentos/{agendamento}/cancelar', [AgendamentoController::class, 'cancelarAgendamento']);
+
+    Route::post('/perfil/raio_busca', [UserController::class, 'raioBusca']);
+    Route::post('/perfil/aviso_24h', [UserController::class, 'aviso24h']);
+    Route::post('/perfil/aviso_2h', [UserController::class, 'aviso2h']);
+    Route::put('/perfil/edit_profile', [UserController::class, 'editProfile']);
+
+    Route::resource('enderecos', EnderecoController::class);
 });
 
 Route::post('/login', [AuthController::class, 'loginMobile']);

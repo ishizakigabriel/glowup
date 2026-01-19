@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function(){
     Route::delete('/servicos/{servico}/colaboradores-capacitados/{colaborador}', [ServicoController::class, 'colaboradoresCapacitadosDestroy'])->name('colaboradores_capacitados.destroy');
     Route::resource('colaboradores', ColaboradorController::class);
     Route::resource('agendamentos', AgendamentoController::class);
+
+    Route::get('/ajax-agendamentos', [AgendamentoController::class, 'ajaxAgendamentos'])->name('ajax_agendamentos');
 });
 
 

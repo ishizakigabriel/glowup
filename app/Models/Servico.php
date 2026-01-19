@@ -19,7 +19,8 @@ class Servico extends Model
         'tempo_medio_duracao',
         'preco',
         'categoria_servico_id',
-        'estabelecimento_id'
+        'estabelecimento_id',
+        'horas_cancelamento'
     ];
 
     public function estabelecimento()

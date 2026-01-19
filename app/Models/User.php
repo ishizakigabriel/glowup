@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'raio_busca',
+        'aviso_24h',
+        'aviso_2h',
+        'foto',
     ];
 
     /**
@@ -50,5 +54,10 @@ class User extends Authenticatable
     public function agendamentos()
     {
         return $this->hasMany(Agendamento::class, 'user_id', 'id');
+    }
+
+    public function enderecos()
+    {
+        return $this->hasMany(Endereco::class, 'user_id', 'id');
     }
 }

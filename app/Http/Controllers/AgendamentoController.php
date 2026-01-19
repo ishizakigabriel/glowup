@@ -247,4 +247,36 @@ class AgendamentoController extends Controller
         }        
         return response()->json($agendamento, 200);
     }
+
+    public function ajaxAgendamentos(Request $request)
+    {
+        $user = $request->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $response = [];
+        if($estabelecimento)
+        {
+            $agendamentos = $estabelecimento->agendamentos()->with('colaborador', 'servico', 'user')->whereIn('status', [0, 1])->where('data', '>=', date('Y-m-d', strtotime($request->get('start'))))->where('data', '<=', date('Y-m-d', strtotime($request->get('end'))))->get();
+            
+            foreach($agendamentos as $agendamento) 
+            {
+                if($agendamento->status == 1 or $agendamento->created_at >= date('Y-m-d H:i:s', strtotime('-15 minutes')))
+                {
+                    $response[] = [
+                        'id' => $agendamento->id,
+                        'start' => $agendamento->data.' '.$agendamento->inicio,
+                        'end' => $agendamento->data.' '.$agendamento->fim,
+                        'title' => $agendamento->servico->nome.' - '.$agendamento->colaborador->nome,
+                        'color' => $agendamento->status == 0 ? '#F3D382' : '#A8E6CF',
+                        'textColor' => '#242426'
+                    ];
+                }
+            }
+            return response()->json($response, 200);
+        }
+        else
+        {
+            return response()->json([], 200);
+        }
+        
+    }
 }
