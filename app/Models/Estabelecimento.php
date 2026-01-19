@@ -15,6 +15,7 @@ class Estabelecimento extends Model
     protected $fillable = [
         'user_id',
         'nome',
+        'cnpj',
         'imagem',
         'cep',
         'logradouro',
@@ -48,4 +49,9 @@ class Estabelecimento extends Model
     {
         return $this->hasMany(Agendamento::class, 'estabelecimento_id', 'id');
     }   
+
+    public function cnaes()
+    {
+        return $this->belongsToMany(Cnae::class, 'cnae_estabelecimento', 'estabelecimento_id', 'cnae_id');
+    }
 }

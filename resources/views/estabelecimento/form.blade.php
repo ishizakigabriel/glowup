@@ -17,6 +17,11 @@
             </div>
 
             <div class="form-group">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required value="{{ old('cnpj', $estabelecimento->cnpj ?? '') }}">
+            </div>
+
+            <div class="form-group">
                 <label for="logo">Logotipo</label>
                 <input type="file" class="form-control" id="logo" name="logo" {{ is_null($estabelecimento) ? 'required' : '' }}>
             </div>
@@ -73,7 +78,10 @@
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 24px; align-items: end; padding-right: 15px;">
+            <div class="form-group" style="margin-top: 24px; flex-direction: row; justify-content: flex-end; gap: 10px; padding-right: 15px;">
+                @if(!is_null($estabelecimento))
+                    <a href="{{ route('verificar_perfil') }}" class="btn-primary" style="background-color: var(--md-sys-color-secondary); text-decoration: none; display: inline-block; text-align: center;">Verificar CNPJ</a>
+                @endif
                 <button type="submit" class="btn-primary">Salvar Perfil</button>
             </div>
         </form>

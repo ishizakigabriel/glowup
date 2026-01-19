@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoriaServicoController;
+use App\Http\Controllers\CnaeController;
 use App\Http\Controllers\EstabelecimentoController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\ServicoController;
@@ -22,8 +23,13 @@ Route::middleware('auth')->group(function(){
     Route::get('/escolher-plano', [UserController::class, 'escolherPlano'])->name('escolher_plano');
     Route::get('/escolher-plano/{plano}', [UserController::class, 'escolherPlanoSubmit'])->name('escolher_plano_submit');
     Route::get('/meu-perfil', [HomeController::class, 'meuPerfil'])->name('meu_perfil');
+    Route::get('/verificar-perfil', [EstabelecimentoController::class, 'verificaCnpj'])->name('verificar_perfil');
 
     Route::resource('categorias', CategoriaServicoController::class);
+    Route::get('/categorias/{categoria}/cnaes', [CategoriaServicoController::class, 'indexCnaes'])->name('categorias.cnaes');
+    Route::post('/categorias/{categoria}/cnaes', [CategoriaServicoController::class, 'addCnae'])->name('categorias.cnaes.store');
+    Route::delete('/categorias/{categoria}/cnaes/{cnae}', [CategoriaServicoController::class, 'removeCnae'])->name('categorias.cnaes.destroy');
+    Route::resource('cnaes', CnaeController::class);
     Route::resource('estabelecimentos', EstabelecimentoController::class);
     Route::resource('fotos', FotoController::class);
     Route::resource('servicos', ServicoController::class);

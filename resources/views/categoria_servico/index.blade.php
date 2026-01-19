@@ -18,6 +18,7 @@
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
+                        <a href="{{ route('categorias.cnaes', $categoria->id) }}" style="color: inherit; text-decoration: none;" title="CNAEs"><span class="material-symbols-outlined">work</span></a>
                         <a href="{{ route('categorias.edit', $categoria->id) }}" style="color: inherit; text-decoration: none;" title="Editar"><span class="material-symbols-outlined">edit</span></a>
                         <form action="{{ route('categorias.destroy', $categoria->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta categoria?');">
                             @csrf

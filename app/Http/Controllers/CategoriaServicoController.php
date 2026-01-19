@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoriaServico;
+use App\Models\Cnae;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -114,5 +115,26 @@ class CategoriaServicoController extends Controller
     {
         $categorias = CategoriaServico::get();
         return $categorias;
+    }
+
+    public function indexCnaes(CategoriaServico $categoria)
+    {
+        $cnaes = Cnae::get();
+        return view('categoria_servico.cnaes', compact('categoria','cnaes'));
+    }
+
+    public function addCnae(Request $request, CategoriaServico $categoria)
+    {
+        $data = $request->all();
+        if(!$categoria->cnaes()->where('cnae_id', $data['cnae_id'])->exists()) {
+            $categoria->cnaes()->attach($data['cnae_id']);
+        }
+        return redirect()->route('categorias.cnaes', $categoria->id);
+    }
+
+    public function removeCnae(Request $request, CategoriaServico $categoria, Cnae $cnae)
+    {
+        $categoria->cnaes()->detach($cnae->id);
+        return redirect()->route('categorias.cnaes', $categoria->id);
     }
 }

@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estabelecimento;
+use App\Models\Cnae;
+use App\Http\Services\BrasilApiService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Geocoder\Facades\Geocoder;
 
 class EstabelecimentoController extends Controller
 {
+    protected $brasilApi;
+    public function __construct(BrasilApiService $brasilApi)
+    {
+        $this->brasilApi = $brasilApi;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -47,7 +54,8 @@ class EstabelecimentoController extends Controller
         }
         $estabelecimento = Estabelecimento::create([
             'user_id' => $user->id,
-            'nome' => $data['nome'],            
+            'nome' => $data['nome'],  
+            'cnpj' => $data['cnpj'],         
             'imagem' => $filename,
             'cep' => $data['cep'],
             'logradouro' => $data['logradouro'],
@@ -105,7 +113,8 @@ class EstabelecimentoController extends Controller
             $filename = $estabelecimento->imagem;
         }
         $estabelecimento->update([
-            'nome' => $data['nome'],            
+            'nome' => $data['nome'], 
+            'cnpj' => $data['cnpj'],            
             'imagem' => $filename,
             'cep' => $data['cep'],
             'logradouro' => $data['logradouro'],
@@ -147,5 +156,38 @@ class EstabelecimentoController extends Controller
         }
 
         return $query->get();
+    }
+
+    public function verificaCnpj(Request $request)
+    {
+        $user = auth()->user();
+        $estabelecimento = Estabelecimento::where('user_id', $user->id)->first();
+        $response = $this->brasilApi->getCnae($estabelecimento->cnpj);
+        $estabelecimento->verificado_em = date('Y-m-d H:i:s');
+        $estabelecimento->save();
+        $cnaesVerificados = [];
+        $cnae = Cnae::where('codigo', $response['cnae_fiscal'])->first();
+        if(is_null($cnae))
+        {
+            $cnae = Cnae::create([
+                'codigo' => $response['cnae_fiscal'],
+                'descricao' => $response['cnae_fiscal_descricao']
+            ]);
+        }
+        $cnaesVerificados[] = $cnae->id;
+        foreach($response['cnaes_secundarios'] as $cnaeApi)
+        {
+            $cnae = Cnae::where('codigo', $cnaeApi['codigo'])->first();
+            if(is_null($cnae))
+            {
+                $cnae = Cnae::create([
+                    'codigo' => $cnaeApi['codigo'],
+                    'descricao' => $cnaeApi['descricao']
+                ]);
+            }
+            $cnaesVerificados[] = $cnae->id;
+        }
+        $estabelecimento->cnaes()->sync($cnaesVerificados);
+        return redirect()->route('estabelecimentos.edit', ['estabelecimento' => $estabelecimento->id]);
     }
 }

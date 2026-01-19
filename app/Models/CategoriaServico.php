@@ -20,4 +20,14 @@ class CategoriaServico extends Model
         'cor_pastel',
         'cor_vivido'
     ];
+
+    public function servicos()
+    {
+        return $this->hasMany(Servico::class, 'categoria_servico_id', 'id');
+    }
+
+    public function cnaes()
+    {
+        return $this->belongsToMany(Cnae::class, 'cnae_categoria', 'categoria_servico_id', 'cnae_id');
+    }
 }
