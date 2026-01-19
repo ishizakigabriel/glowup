@@ -35,7 +35,9 @@
 <div class="profile-container">
     <div class="card card-translucent">
         <h2>{{ $servico->nome ?? 'Novo Serviço' }}</h2>
-        
+        @php
+            $cnaesVerificados =$estabelecimento->cnaes->pluck('id')->toArray();
+        @endphp        
         <form action="{{ is_null($servico) ? route('servicos.store') : route('servicos.update', ['servico' => $servico->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (!is_null($servico))
@@ -46,15 +48,25 @@
                 <label for="nome">Nome do Serviço</label>
                 <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Corte Masculino" required value="{{ old('nome', $servico->nome ?? '') }}">
             </div>
-
             <div class="form-row">
                 <div class="form-col">
                     <label for="categoria_servico_id">Categoria</label>
                     <select class="form-control" id="categoria_servico_id" name="categoria_servico_id" required>
                         <option value="">Selecione uma categoria</option>
                         @foreach($categorias as $categoria)
+                            @php
+                                $cnaesVerificadosCategoria = $categoria->cnaes->pluck('id')->toArray();
+                                $verificado = false;
+                                foreach ($cnaesVerificadosCategoria as $cnaeVerificado) {
+                                    # code...
+                                    if(in_array($cnaeVerificado, $cnaesVerificados)) {
+                                        $verificado = true;
+                                        break;
+                                    }
+                                }
+                            @endphp
                             <option value="{{ $categoria->id }}" {{ (isset($servico) && $servico->categoria_servico_id == $categoria->id) ? 'selected' : '' }}>
-                                {{ $categoria->nome }} {{ $categoria->cnaes->contains('id', optional($estabelecimento)->cnae_id) ? '✓' : '' }}
+                                {{ $categoria->nome }} {{ $verificado ? '✓' : '' }}
                             </option>
                         @endforeach
                     </select>
